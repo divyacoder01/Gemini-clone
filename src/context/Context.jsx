@@ -1,35 +1,40 @@
 import React, { createContext, useState } from "react";
+import runChat from "../config/gemini";
+
+
+
 
 const Context = createContext();
 
 const ContextProvider = (props) => {
-  const [input, setInput] = useState("");           // Store user input
-  const [recentPrompt, setRecentPrompt] = useState("");  // Store most recent prompt
-  const [showResult, setShowResult] = useState(false);   // Control visibility of result
-  const [loading, setLoading] = useState(false);         // Control loading state
-  const [resultData, setResultData] = useState("");      // Store result data
-  const [prevPrompts, setPrevPrompts] = useState([]);    // Store previous prompts
+  const [input, setInput] = useState("");
+  const [recentPrompt, setRecentPrompt] = useState("");
+  const [showResult, setShowResult] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resultData, setResultData] = useState("");
+  const [prevPrompts, setPrevPrompts] = useState([]);
 
-  // Delay function for simulating typing effect
   const delay = (index, nextWord, totalWords) => {
-    const delayTime = (10 / totalWords) * index;  // Calculate delay for each word
+    const delayTime = (10 / totalWords) * index;
     setTimeout(() => {
-      setResultData((prev) => prev + nextWord);  // Append each word with a delay
+      setResultData((prev) => prev + nextWord);
     }, delayTime);
   };
 
-  const onSent = async () => {
-    if (!input) return;  // If there's no input, do nothing
+  const onSent = async (prompt) => {
+    if (!input) return;
 
-    setResultData("");  // Clear previous result data
-    setLoading(true);   // Show loading spinner
-    setShowResult(true);  // Show result area
-    setRecentPrompt(input);  // Set the current input as the recent prompt
+    setResultData("");
+    setLoading(true);
+    setShowResult(true);
+    setRecentPrompt(input);
 
     // Add the input to the previous prompts
     setPrevPrompts((prev) => [...prev, input]);
 
     const response = await runChat(input);  // Get the response based on input
+    // console.log(response)
+
     let responseArray = response.split("**");  // Split response based on custom delimiter
     let newArray = "";
     let newResponse = "";
@@ -59,10 +64,10 @@ const ContextProvider = (props) => {
     setInput("");       // Clear the input field
   };
 
-  const runChat = async (prompt) => {
-    console.log(`Running chat with prompt: ${prompt}`);
-    return `This is a simulated response based on: ${prompt}`;  // Simulated response
-  };
+  // const runChat = async (prompt) => {
+  //   console.log(`Running chat with prompt: ${prompt}`);
+  //   return `This is a simulated response based on: ${prompt}`;  // Simulated response
+  // };
 
   // Function to reset the state and start a new chat
   const newChat = () => {
@@ -83,7 +88,8 @@ const ContextProvider = (props) => {
     setInput,
     prevPrompts,
     setPrevPrompts,
-    newChat,  // Provide newChat function in context
+    newChat,
+    setRecentPrompt,
   };
 
   return (

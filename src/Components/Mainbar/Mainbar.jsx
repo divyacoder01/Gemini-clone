@@ -5,7 +5,7 @@ import { assets } from '../../assets/assets';
 import './Mainbar.css';
 
 const Mainbar = () => {
-  const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } = useContext(Context);
+  const { onSent, recentPrompt, showResult, loading, resultData, setInput, input }= useContext(Context);
 
   return (
     <div className='main'>
@@ -77,7 +77,7 @@ const Mainbar = () => {
             <img className='gallery' src={assets.gallery_icon} alt="Gallery Icon" aria-label="Gallery Icon" />
             <img className='mic' src={assets.mic_icon} alt="Microphone Icon" aria-label="Microphone Icon" />
             <img
-              onClick={onSent}
+              onClick={()=>onSent()}
               className='sent'
               src={assets.sent_icon}
               alt="Send Icon"
